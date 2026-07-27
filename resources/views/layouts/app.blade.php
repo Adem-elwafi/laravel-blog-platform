@@ -12,7 +12,7 @@
         
         @if(app()->environment('local'))
             <script type="module">
-                import RefreshRuntime from "http://localhost:5173/@@react-refresh";
+                import RefreshRuntime from "http://localhost:5174/@@react-refresh";
                 RefreshRuntime.injectIntoGlobalHook(window);
                 window.$RefreshReg$ = () => {};
                 window.$RefreshSig$ = () => (type) => type;
