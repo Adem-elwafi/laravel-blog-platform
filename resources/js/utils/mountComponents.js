@@ -5,12 +5,16 @@ import LikeButton from '../components/LikeButton';
 import Comments from '../components/Comments';
 import PostFilters from '../components/PostFilters';
 import InfiniteScrollPosts from '../components/InfiniteScrollPosts';
+import AddFriendButton from '../components/AddFriendButton';
+import FriendList from '../components/FriendList';
 
 const componentMap = {
   LikeButton,
   Comments,
   PostFilters,
   InfiniteScrollPosts,
+  AddFriendButton,
+  FriendList,
 };
 
 function coerceValue(value) {

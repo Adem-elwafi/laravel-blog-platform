@@ -38,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Public user profile
+Route::get('/users/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
 // Public posts listing and detail (registered after auth routes so /posts/create matches the create route)
 Route::resource('posts', PostController::class)->only(['index', 'show']);
 
