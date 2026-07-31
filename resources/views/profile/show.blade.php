@@ -89,10 +89,4 @@
             </div>
         @endif
     </div>
-
-    <script>
-        window.isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-        window.authUserId = {{ auth()->id() ?? 'null' }};
-        window.userRole = '{{ auth()->user()->role ?? '' }}';
-    </script>
 </x-app-layout>

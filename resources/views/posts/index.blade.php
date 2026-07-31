@@ -47,13 +47,6 @@
         </div>
     </div>
 
-    <!-- Pass auth data to JavaScript -->
-    <script>
-        window.isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
-        window.authUserId = {{ auth()->id() ?? 'null' }};
-        window.userRole = '{{ auth()->user()->role ?? '' }}';
-    </script>
-
     <!-- GSAP Scroll Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
