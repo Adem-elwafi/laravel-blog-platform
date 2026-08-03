@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-const CHAT_APP_URL = import.meta.env.VITE_CHAT_APP_URL || 'http://localhost:8000';
+import { chatPost } from '../utils/chatApi';
 
 export default function AddFriendButton({ profileUserId, isOwnProfile }) {
   const [status, setStatus] = useState('idle');
@@ -15,15 +14,11 @@ export default function AddFriendButton({ profileUserId, isOwnProfile }) {
     setMessage('');
 
     try {
-      const response = await fetch(`${CHAT_APP_URL}/api/friend-requests`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({ addressee_id: profileUserId }),
-      });
+      let response = await chatPost('/api/friend-requests', { addressee_id: profileUserId });
+
+      if (response.status === 419) {
+        response = await chatPost('/api/friend-requests', { addressee_id: profileUserId });
+      }
 
       if (response.status === 201) {
         setStatus('sent');

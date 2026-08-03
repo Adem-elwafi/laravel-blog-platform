@@ -20,6 +20,9 @@
                 {{-- Sidebar --}}
                 <div class="lg:col-span-1">
                     <div
+                        data-component="FriendRequests"
+                    ></div>
+                    <div
                         data-component="FriendList"
                     ></div>
                 </div>
