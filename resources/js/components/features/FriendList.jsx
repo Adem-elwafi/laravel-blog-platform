@@ -1,45 +1,11 @@
-import React, { useState, useEffect } from 'react';
-
-const CHAT_APP_URL = import.meta.env.VITE_CHAT_APP_URL || 'http://localhost:8000';
+import React from 'react';
+import { CHAT_APP_URL } from '../../services/csrfFetch';
+import { useFriends } from '../../hooks/useFriendship';
 
 export default function FriendList() {
-  const [friends, setFriends] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error } = useFriends();
 
-  const fetchFriends = async () => {
-    try {
-      const response = await fetch(`${CHAT_APP_URL}/api/friends`, {
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch friends (${response.status})`);
-      }
-
-      const data = await response.json();
-      setFriends(data.data || data.friends || data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!window.isAuthenticated) {
-      setIsLoading(false);
-      return;
-    }
-
-    fetchFriends();
-
-    window.addEventListener('friendship:updated', fetchFriends);
-    return () => window.removeEventListener('friendship:updated', fetchFriends);
-  }, []);
+  const friends = data || [];
 
   if (!window.isAuthenticated) {
     return null;

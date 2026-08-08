@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { chatPost } from '../../services/chatApi';
+import { sendFriendRequest } from '../../services/friendshipApi';
 
 export default function AddFriendButton({ profileUserId, isOwnProfile }) {
   const [status, setStatus] = useState('idle');
@@ -14,11 +14,7 @@ export default function AddFriendButton({ profileUserId, isOwnProfile }) {
     setMessage('');
 
     try {
-      let response = await chatPost('/api/friend-requests', { addressee_id: profileUserId });
-
-      if (response.status === 419) {
-        response = await chatPost('/api/friend-requests', { addressee_id: profileUserId });
-      }
+      const response = await sendFriendRequest(profileUserId);
 
       if (response.status === 201) {
         setStatus('sent');

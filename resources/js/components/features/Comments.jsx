@@ -1,5 +1,6 @@
-// resources/js/components/Comments.jsx
+// resources/js/components/features/Comments.jsx
 import React, { useState } from 'react';
+import { addComment, deleteComment } from '../../services/postApi';
 
 export default function Comments({ postId, user, initialComments, csrfToken }) {
     const [comments, setComments] = useState(initialComments || []);
@@ -32,7 +33,7 @@ export default function Comments({ postId, user, initialComments, csrfToken }) {
         setError(null);
 
         try {
-            const response = await window.axios.post(`/api/posts/${postId}/comments`, commentData);
+            const response = await addComment(postId, commentData.body);
             // Replace temp comment with real one from API
             setComments([response.data.comment, ...prevComments]);
         } catch (err) {
@@ -56,7 +57,7 @@ export default function Comments({ postId, user, initialComments, csrfToken }) {
         setError(null);
 
         try {
-            await window.axios.delete(`/api/comments/${commentId}`);
+            await deleteComment(commentId);
         } catch (err) {
             // Rollback on error
             setComments([...prevComments, commentToDelete]);

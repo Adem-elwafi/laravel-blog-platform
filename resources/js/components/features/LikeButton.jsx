@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toggleLike } from '../../services/postApi';
 
 /**
  * LikeButton Component
@@ -12,13 +13,6 @@ export default function LikeButton({ postId, initialLiked, initialLikesCount, is
   const [isLoading, setIsLoading] = useState(false);
 
   /**
-   * Get CSRF token from meta tag
-   */
-  const getCsrfToken = () => {
-    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-  };
-
-  /**
    * Handle like/unlike toggle
    */
   const handleToggleLike = async () => {
@@ -27,14 +21,7 @@ export default function LikeButton({ postId, initialLiked, initialLikesCount, is
     setIsLoading(true);
 
     try {
-      const response = await fetch(`/posts/${postId}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': getCsrfToken(),
-        },
-      });
+      const response = await toggleLike(postId);
 
       if (!response.ok) {
         throw new Error('Failed to toggle like');

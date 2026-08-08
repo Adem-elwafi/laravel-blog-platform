@@ -1,64 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { chatGet, chatPost } from '../../services/chatApi';
+import React, { useState } from 'react';
+import { useFriendRequests } from '../../hooks/useFriendship';
+import { respondToFriendRequest } from '../../services/friendshipApi';
+import { dispatchFriendshipUpdated } from '../../services/appEvents';
 
 export default function FriendRequests() {
-  const [incoming, setIncoming] = useState([]);
-  const [outgoing, setOutgoing] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isLoading, error, reload } = useFriendRequests();
+  const [actionError, setActionError] = useState(null);
   const [busyId, setBusyId] = useState(null);
 
-  const fetchRequests = useCallback(async () => {
-    try {
-      const response = await chatGet('/api/friend-requests');
-      if (!response.ok) {
-        throw new Error(`Failed to load requests (${response.status})`);
-      }
-      const data = await response.json();
-      setIncoming(data.incoming || []);
-      setOutgoing(data.outgoing || []);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!window.isAuthenticated) {
-      setIsLoading(false);
-      return;
-    }
-
-    fetchRequests();
-
-    window.addEventListener('friendship:updated', fetchRequests);
-    return () => window.removeEventListener('friendship:updated', fetchRequests);
-  }, [fetchRequests]);
+  const incoming = data?.incoming || [];
+  const outgoing = data?.outgoing || [];
 
   const respond = async (id, action) => {
     setBusyId(id);
-    setError(null);
+    setActionError(null);
     try {
-      let response = await chatPost(`/api/friend-requests/${id}/${action}`);
-
-      if (response.status === 419) {
-        response = await chatPost(`/api/friend-requests/${id}/${action}`);
-      }
+      const response = await respondToFriendRequest(id, action);
 
       if (response.ok) {
-        await fetchRequests();
-        window.dispatchEvent(new CustomEvent('friendship:updated'));
+        await reload();
+        dispatchFriendshipUpdated();
       } else {
-        const data = await response.json().catch(() => ({}));
-        setError(data.message || `Could not ${action} request`);
+        const errorData = await response.json().catch(() => ({}));
+        setActionError(errorData.message || `Could not ${action} request`);
       }
     } catch {
-      setError('Network error — could not reach chat server');
+      setActionError('Network error — could not reach chat server');
     } finally {
       setBusyId(null);
     }
   };
+
+  const errorBanner = actionError || error;
 
   if (!window.isAuthenticated) {
     return null;
@@ -77,7 +50,7 @@ export default function FriendRequests() {
     );
   }
 
-  if (error && incoming.length === 0 && outgoing.length === 0) {
+  if (errorBanner && incoming.length === 0 && outgoing.length === 0) {
     return (
       <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Friend Requests</h3>
@@ -99,8 +72,8 @@ export default function FriendRequests() {
     <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
       <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Friend Requests</h3>
 
-      {error && (
-        <p className="mb-3 text-sm text-red-600 dark:text-red-400">{error}</p>
+      {errorBanner && (
+        <p className="mb-3 text-sm text-red-600 dark:text-red-400">{errorBanner}</p>
       )}
 
       {incoming.length > 0 && (
