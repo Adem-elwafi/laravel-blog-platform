@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { chatPost } from '../utils/chatApi';
+import { chatPost } from '../../services/chatApi';
 
 export default function AddFriendButton({ profileUserId, isOwnProfile }) {
   const [status, setStatus] = useState('idle');

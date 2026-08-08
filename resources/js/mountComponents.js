@@ -1,13 +1,13 @@
-// resources/js/utils/mountComponents.js
+// resources/js/mountComponents.js
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import LikeButton from '../components/LikeButton';
-import Comments from '../components/Comments';
-import PostFilters from '../components/PostFilters';
-import InfiniteScrollPosts from '../components/InfiniteScrollPosts';
-import AddFriendButton from '../components/AddFriendButton';
-import FriendList from '../components/FriendList';
-import FriendRequests from '../components/FriendRequests';
+import LikeButton from './components/features/LikeButton';
+import Comments from './components/features/Comments';
+import PostFilters from './components/features/PostFilters';
+import InfiniteScrollPosts from './components/features/InfiniteScrollPosts';
+import AddFriendButton from './components/features/AddFriendButton';
+import FriendList from './components/features/FriendList';
+import FriendRequests from './components/features/FriendRequests';
 
 const componentMap = {
   LikeButton,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { chatGet, chatPost } from '../utils/chatApi';
+import { chatGet, chatPost } from '../../services/chatApi';
 
 export default function FriendRequests() {
   const [incoming, setIncoming] = useState([]);

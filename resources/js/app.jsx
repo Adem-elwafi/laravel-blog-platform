@@ -1,7 +1,7 @@
 import './bootstrap';
 import { gsap } from 'gsap';
 import Alpine from 'alpinejs';
-import { mountComponents } from './utils/mountComponents';
+import { mountComponents } from './mountComponents';
 
 window.Alpine = Alpine;
 Alpine.start();

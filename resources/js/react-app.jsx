@@ -1,4 +1,4 @@
-import { mountComponents } from './utils/mountComponents';
+import { mountComponents } from './mountComponents';
 
 document.addEventListener('DOMContentLoaded', () => {
   mountComponents();
