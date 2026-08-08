@@ -6,12 +6,14 @@ use App\Models\Post;            // your Post model
 use App\Models\User;            // for fetching authors
 use App\Models\Comment;         // for stats
 use App\Models\Like;            // for stats
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;      // for handling form requests
 use Illuminate\Support\Facades\Auth; // if you check current user
 use Illuminate\Support\Facades\Storage; // for handling image storage
 use Illuminate\Support\Facades\Cache; // for caching stats
-use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -47,7 +49,7 @@ class PostController extends Controller
     {
         $posts = $this->buildFeedQuery($request)->paginate(10);
 
-        $initialPosts = $posts->through(fn (Post $post) => $this->transformPost($post));
+        $initialPosts = PostResource::collection($posts->items());
 
         // Authors for filter dropdown
         $authors = User::has('posts')
@@ -66,7 +68,7 @@ class PostController extends Controller
         $posts = $this->buildFeedQuery($request)->paginate(10);
 
         return response()->json([
-            'posts' => $posts->through(fn (Post $post) => $this->transformPost($post)),
+            'posts' => PostResource::collection($posts->items()),
             'current_page' => $posts->currentPage(),
             'last_page' => $posts->lastPage(),
             'has_more' => $posts->hasMorePages(),
@@ -116,27 +118,6 @@ class PostController extends Controller
         return $query;
     }
 
-    /**
-     * Transform a post model into the JSON-friendly payload needed by the feed.
-     */
-    private function transformPost(Post $post): array
-    {
-        return [
-            'id' => $post->id,
-            'title' => $post->title,
-            'content' => Str::limit(strip_tags($post->content), 400),
-            'image' => $post->image,
-            'user_id' => $post->user_id,
-            'user' => [
-                'id' => $post->user->id,
-                'name' => $post->user->name,
-            ],
-            'created_at' => $post->created_at->toIso8601String(),
-            'likes_count' => $post->likes_count,
-            'comments_count' => $post->comments_count,
-            'liked' => (bool) ($post->liked_by_auth ?? false),
-        ];
-    }
 public function create()
 {
     return view('posts.create');
@@ -151,16 +132,10 @@ public function show(Post $post)
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        // Validate form inputs including optional image
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Max 2MB
-        ]);
-
         // Handle image upload if provided
+        $validated = $request->validated();
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('posts', 'public');
             $validated['image'] = $imagePath;
@@ -186,21 +161,15 @@ public function show(Post $post)
             return view('posts.edit', compact('post'));
         }
 
-        public function update(Request $request, Post $post)
+        public function update(UpdatePostRequest $request, Post $post)
         {
             // Authorization check
             if (Auth::id() !== $post->user_id && Auth::user()->role !== 'admin') {
                 abort(403);
             }
 
-            // Validate form inputs including optional image
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'content' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Max 2MB
-            ]);
-
             // Handle new image upload if provided
+            $validated = $request->validated();
             if ($request->hasFile('image')) {
                 // Delete old image if it exists
                 if ($post->image) {

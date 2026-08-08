@@ -5,6 +5,16 @@ top when a meaningful choice is made.
 
 ---
 
+## ADR-005 — `FriendshipStatus` enum is duplicated across apps (2026)
+
+**Decision:** `FriendshipStatus` exists in both realtime-chat (`app/Enums/FriendshipStatus.php`) and blog-platform. realtime-chat is the canonical copy; blog's copy carries a sync-note comment and is kept identical by convention.
+
+**Rationale:** The two apps are separate repositories with no shared package. blog needs the enum only to reason about friendship state locally (e.g., `User::friends()`), while the authoritative statuses live in chat.
+
+**Trade-offs:** Duplication risks drift. Any change to cases/values must be applied to both copies. A shared package or extracted library would remove this, but is out of scope for now.
+
+---
+
 ## ADR-004 — Shared-database table ownership split (2026)
 
 **Decision:** `shared_app_db` is split by table ownership: blog owns `posts`, `comments`,

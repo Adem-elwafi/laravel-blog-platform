@@ -38,7 +38,7 @@
             <!-- Infinite Scroll Posts (React Component) -->
             <div 
                 data-component="InfiniteScrollPosts"
-                data-initial-posts='@json($posts->items())'
+                data-initial-posts='@json($initialPosts)'
                 data-current-page="{{ $posts->currentPage() }}"
                 data-last-page="{{ $posts->lastPage() }}"
                 data-filters="{{ json_encode(['search' => request('search', ''), 'author' => request('author', ''), 'sort' => request('sort', 'newest')]) }}"

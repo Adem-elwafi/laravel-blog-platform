@@ -10,8 +10,6 @@ use App\Http\Controllers\AdminController;
 
 Route::get('/', [PostController::class, 'welcome'])->name('welcome');
 
-Route::get('/api/posts/feed', [PostController::class, 'feed'])->name('posts.feed');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
     // === Existing Web Methods (Blade form handlers) ===
 
-    public function store(Request $request, Post $post)
+    public function store(StoreCommentRequest $request, Post $post)
     {
-        $request->validate([
-            'body' => 'required|string|max:1000',
-        ]);
-
         Comment::create([
             'body' => $request->input('body'),
             'user_id' => Auth::id(),
@@ -45,15 +42,11 @@ class CommentController extends Controller
     public function index(Post $post): JsonResponse
     {
         $comments = $post->comments()->with('user')->get();
-        return response()->json(['comments' => $comments]);
+        return response()->json(['comments' => CommentResource::collection($comments)]);
     }
 
-    public function apiStore(Request $request, Post $post): JsonResponse
+    public function apiStore(StoreCommentRequest $request, Post $post): JsonResponse
     {
-        $request->validate([
-            'body' => 'required|string|max:1000',
-        ]);
-
         $comment = Comment::create([
             'body' => $request->input('body'),
             'user_id' => Auth::id(),
@@ -63,7 +56,7 @@ class CommentController extends Controller
         $comment->load('user');
 
         return response()->json([
-            'comment' => $comment,
+            'comment' => new CommentResource($comment),
             'message' => 'Comment added'
         ]);
     }
