@@ -1,9 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { sendFriendRequest } from '../../services/friendshipApi';
+import { useFriends, useFriendRequests } from '../../hooks/useFriendship';
+import { dispatchFriendshipUpdated } from '../../services/appEvents';
 
 export default function AddFriendButton({ profileUserId, isOwnProfile }) {
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
+  const { data: friends } = useFriends();
+  const { data: requests } = useFriendRequests();
+
+  const profileId = Number(profileUserId);
+  const isFriend = (friends || []).some((friend) => Number(friend.id) === profileId);
+  const outgoingPending = (requests?.outgoing || []).some(
+    (req) => Number(req.user?.id) === profileId
+  );
+
+  // Clear the optimistic "Request Sent" state once fresh data arrives and shows
+  // the request is no longer pending (e.g. the other user declined it in real time).
+  useEffect(() => {
+    if (status === 'sent' && !outgoingPending && !isFriend) {
+      setStatus('idle');
+      setMessage('');
+    }
+  }, [status, outgoingPending, isFriend]);
 
   if (isOwnProfile || !window.isAuthenticated) {
     return null;
@@ -18,6 +37,7 @@ export default function AddFriendButton({ profileUserId, isOwnProfile }) {
 
       if (response.status === 201) {
         setStatus('sent');
+        dispatchFriendshipUpdated();
       } else if (response.status === 422) {
         const data = await response.json();
         setStatus('error');
@@ -33,7 +53,21 @@ export default function AddFriendButton({ profileUserId, isOwnProfile }) {
     }
   };
 
-  if (status === 'sent') {
+  if (isFriend) {
+    return (
+      <button
+        disabled
+        className="flex items-center space-x-2 px-6 py-3 bg-green-500 text-white rounded-lg font-semibold opacity-75 cursor-not-allowed"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Friends</span>
+      </button>
+    );
+  }
+
+  if (outgoingPending || status === 'sent') {
     return (
       <button
         disabled

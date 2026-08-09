@@ -337,9 +337,9 @@
                                     <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-500">
                                         <div class="flex items-center space-x-2">
                                             <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
-                                                {{ substr($post->user->name, 0, 1) }}
+                                                {{ substr(optional($post->user)->name ?? '?', 0, 1) }}
                                             </div>
-                                            <span>{{ $post->user->name }}</span>
+                                            <span>{{ optional($post->user)->name ?? 'Unknown author' }}</span>
                                         </div>
                                         <span>{{ $post->created_at->diffForHumans() }}</span>
                                     </div>
