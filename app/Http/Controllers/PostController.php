@@ -57,7 +57,15 @@ class PostController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('posts.index', compact('posts', 'authors', 'initialPosts'));
+        // Trending: most-liked posts for the right context rail (existing data only)
+        $topPosts = Post::withCount(['likes', 'comments'])
+            ->with('user:id,name')
+            ->orderBy('likes_count', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('posts.index', compact('posts', 'authors', 'initialPosts', 'topPosts'));
     }
 
     /**
@@ -146,6 +154,16 @@ public function show(Post $post)
 
         // Create post with validated data
         $post = Post::create($validated);
+
+        // The in-feed composer posts as JSON — return the resource so it can
+        // optimistically prepend the real post. Web form submissions keep the
+        // classic redirect flow.
+        if ($request->expectsJson()) {
+            $post->load('user:id,name');
+            $post->loadCount(['likes', 'comments']);
+
+            return response()->json((new PostResource($post))->resolve(), 201);
+        }
 
         return redirect()->route('posts.show', $post)->with('success', 'Post created successfully.');
     }

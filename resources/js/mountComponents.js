@@ -8,6 +8,7 @@ import InfiniteScrollPosts from './components/features/InfiniteScrollPosts';
 import AddFriendButton from './components/features/AddFriendButton';
 import FriendList from './components/features/FriendList';
 import FriendRequests from './components/features/FriendRequests';
+import PostComposer from './components/features/PostComposer';
 
 const componentMap = {
   LikeButton,
@@ -17,6 +18,7 @@ const componentMap = {
   AddFriendButton,
   FriendList,
   FriendRequests,
+  PostComposer,
 };
 
 function coerceValue(value) {

@@ -1,49 +1,120 @@
 <x-app-layout>
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-        <div class="max-w-2xl mx-auto px-4">
-            <!-- Page Header -->
-            <div class="mb-8 text-center">
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    Discover Stories
-                </h1>
-                <p class="text-gray-600 dark:text-gray-400">
-                    Explore amazing content from our community
-                </p>
-            </div>
+    <div class="bg-brand-50 dark:bg-gray-900 min-h-screen">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6 flex gap-6">
 
-            <!-- Create Post Button (Floating) -->
-            @auth
-                <div class="mb-6">
-                    <a href="{{ route('posts.create') }}" 
-                       class="flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl py-4 px-6 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            <!-- Left Nav Rail -->
+            <aside class="hidden lg:block w-52 shrink-0 sticky top-24 self-start">
+                <nav class="flex flex-col gap-1" aria-label="Main">
+                    <a href="{{ url('/') }}"
+                       class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] font-medium transition {{ request()->is('/') ? 'bg-brand-900 text-white' : 'text-brand-600 hover:bg-brand-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/>
                         </svg>
-                        Create New Post
+                        Home
+                    </a>
+                    <a href="{{ route('posts.index') }}"
+                       class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] font-medium transition {{ request()->routeIs('posts.*') ? 'bg-brand-900 text-white' : 'text-brand-600 hover:bg-brand-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                        </svg>
+                        Posts
+                    </a>
+                    @auth
+                        <a href="{{ route('dashboard') }}"
+                           class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] font-medium transition {{ request()->routeIs('dashboard') ? 'bg-brand-900 text-white' : 'text-brand-600 hover:bg-brand-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m14.364-6.364l-1.414 1.414M8.05 16.95l-1.414 1.414M17 12a5 5 0 11-10 0 5 5 0 0110 0z"/>
+                            </svg>
+                            Dashboard
+                        </a>
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}"
+                               class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] font-medium transition {{ request()->routeIs('admin.*') ? 'bg-brand-900 text-white' : 'text-brand-600 hover:bg-brand-100 dark:text-gray-400 dark:hover:bg-gray-800' }}">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                Admin
+                            </a>
+                        @endif
+                    @endauth
+                </nav>
+
+                <div class="mt-8 pt-4 border-t border-brand-100 dark:border-gray-800">
+                    <a href="{{ route('posts.create') }}"
+                       class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[15px] font-medium text-brand-600 hover:bg-brand-100 dark:text-gray-400 dark:hover:bg-gray-800 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        Image post
                     </a>
                 </div>
-            @endauth
+            </aside>
 
-            <!-- Filters Section (React Component) -->
-            <div class="mb-6">
-                <div 
-                    data-component="PostFilters"
-                    data-authors='@json($authors)'
-                    data-initial-search="{{ request('search', '') }}"
-                    data-initial-author="{{ request('author', '') }}"
-                    data-initial-sort="{{ request('sort', 'newest') }}"
+            <!-- Center Feed (locked ~600px) -->
+            <main class="flex-1 min-w-0 max-w-[600px] mx-auto w-full">
+                @auth
+                    <div class="mb-4">
+                        <div
+                            data-component="PostComposer"
+                            data-user-name="{{ Auth::user()->name }}"
+                        ></div>
+                    </div>
+                @endauth
+
+                <!-- Filters (React Component) -->
+                <div class="mb-4">
+                    <div
+                        data-component="PostFilters"
+                        data-authors='@json($authors)'
+                        data-initial-search="{{ request('search', '') }}"
+                        data-initial-author="{{ request('author', '') }}"
+                        data-initial-sort="{{ request('sort', 'newest') }}"
+                    ></div>
+                </div>
+
+                <!-- Infinite Scroll Posts (React Component) -->
+                <div
+                    data-component="InfiniteScrollPosts"
+                    data-initial-posts='@json($initialPosts)'
+                    data-current-page="{{ $posts->currentPage() }}"
+                    data-last-page="{{ $posts->lastPage() }}"
+                    data-filters="{{ json_encode(['search' => request('search', ''), 'author' => request('author', ''), 'sort' => request('sort', 'newest')]) }}"
                 ></div>
-            </div>
+            </main>
 
-            <!-- Infinite Scroll Posts (React Component) -->
-            <div 
-                data-component="InfiniteScrollPosts"
-                data-initial-posts='@json($initialPosts)'
-                data-current-page="{{ $posts->currentPage() }}"
-                data-last-page="{{ $posts->lastPage() }}"
-                data-filters="{{ json_encode(['search' => request('search', ''), 'author' => request('author', ''), 'sort' => request('sort', 'newest')]) }}"
-            ></div>
+            <!-- Right Context Panel -->
+            <aside class="hidden xl:block w-72 shrink-0 space-y-4 sticky top-24 self-start">
+                @auth
+                    <div data-component="FriendRequests"></div>
+                    <div data-component="FriendList"></div>
+                @endauth
 
+                @if($topPosts->isNotEmpty())
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-brand-100 dark:border-gray-700 overflow-hidden">
+                        <h3 class="px-panel py-3 text-sm font-bold text-brand-900 dark:text-white border-b border-brand-100 dark:border-gray-700">
+                            Trending
+                        </h3>
+                        <ul class="divide-y divide-brand-100 dark:divide-gray-700">
+                            @foreach($topPosts as $top)
+                                <li>
+                                    <a href="{{ route('posts.show', $top) }}" class="flex items-start gap-avatar px-panel py-3 hover:bg-brand-50 dark:hover:bg-gray-700/50 transition">
+                                        <div class="min-w-0 flex-1">
+                                            <p class="text-sm font-semibold text-brand-900 dark:text-white truncate">{{ $top->title }}</p>
+                                            <p class="text-xs text-brand-400 dark:text-gray-500 mt-0.5">{{ $top->user->name }}</p>
+                                        </div>
+                                        <span class="flex items-center gap-1 text-xs font-medium text-brand-500 dark:text-gray-400 shrink-0">
+                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                                            </svg>
+                                            {{ $top->likes_count }}
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </aside>
         </div>
     </div>
 

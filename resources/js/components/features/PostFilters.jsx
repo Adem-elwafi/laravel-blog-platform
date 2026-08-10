@@ -61,11 +61,11 @@ export default function PostFilters({ authors = [], initialSearch = '', initialA
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl p-panel border border-brand-100 dark:border-gray-700 shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Search Input - Debounced for better performance */}
         <div>
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label htmlFor="search" className="block text-sm font-medium text-brand-700 dark:text-gray-300 mb-2">
             Search Posts
           </label>
           <input
@@ -74,20 +74,20 @@ export default function PostFilters({ authors = [], initialSearch = '', initialA
             placeholder="Search by title or content..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+            className="w-full px-4 py-2 border border-brand-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-900 focus:border-brand-900 dark:bg-gray-700 dark:text-white transition-colors duration-200"
           />
         </div>
 
         {/* Author Filter Dropdown */}
         <div>
-          <label htmlFor="author" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label htmlFor="author" className="block text-sm font-medium text-brand-700 dark:text-gray-300 mb-2">
             Filter by Author
           </label>
           <select
             id="author"
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+            className="w-full px-4 py-2 border border-brand-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-900 focus:border-brand-900 dark:bg-gray-700 dark:text-white transition-colors duration-200"
           >
             <option value="">All Authors</option>
             {authors.map((auth) => (
@@ -100,14 +100,14 @@ export default function PostFilters({ authors = [], initialSearch = '', initialA
 
         {/* Sort Options Dropdown */}
         <div>
-          <label htmlFor="sort" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label htmlFor="sort" className="block text-sm font-medium text-brand-700 dark:text-gray-300 mb-2">
             Sort By
           </label>
           <select
             id="sort"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+            className="w-full px-4 py-2 border border-brand-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-900 focus:border-brand-900 dark:bg-gray-700 dark:text-white transition-colors duration-200"
           >
             <option value="newest">Newest First</option>
             <option value="popular">Most Popular (Likes)</option>
@@ -121,7 +121,7 @@ export default function PostFilters({ authors = [], initialSearch = '', initialA
         {/* Apply Filters Button - Apply author and sort changes */}
         <button
           onClick={handleApplyFilters}
-          className="px-6 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200 font-medium"
+          className="px-6 py-2 bg-brand-900 text-white rounded-lg hover:bg-brand-800 transition-colors duration-200 font-medium"
         >
           Apply Filters
         </button>
@@ -130,7 +130,7 @@ export default function PostFilters({ authors = [], initialSearch = '', initialA
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="px-6 py-2 bg-gray-300 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-200 font-medium"
+            className="px-6 py-2 bg-brand-100 dark:bg-gray-600 text-brand-800 dark:text-gray-200 rounded-lg hover:bg-brand-200 dark:hover:bg-gray-500 transition-colors duration-200 font-medium"
           >
             Clear Filters
           </button>

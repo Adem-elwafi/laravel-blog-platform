@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import LikeButton from './LikeButton';
+import {
+  POST_CREATED,
+  POST_REPLACED,
+  POST_CREATE_FAILED,
+} from '../../services/appEvents';
 
 export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1, lastPage = 1, filters = {} }) {
   const [posts, setPosts] = useState(initialPosts);
@@ -18,6 +23,44 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
     setPage(startingPage);
     setHasMore(startingPage < last);
   }, [initialPosts, currentPage, lastPage]);
+
+  // In-feed composer events: optimistic prepend, then replace or rollback.
+  useEffect(() => {
+    const prependPost = (e) => {
+      const incoming = e.detail;
+      if (!incoming) return;
+      setPosts((prev) => {
+        const exists = prev.some(
+          (p) => p.clientId === incoming.clientId || (incoming.id && p.id === incoming.id)
+        );
+        if (exists) return prev;
+        return [incoming, ...prev];
+      });
+    };
+
+    const replacePost = (e) => {
+      const { clientId, post } = e.detail || {};
+      if (!clientId || !post) return;
+      setPosts((prev) =>
+        prev.map((p) => (p.clientId === clientId ? { ...post, clientId: undefined, pending: false } : p))
+      );
+    };
+
+    const rollbackPost = (e) => {
+      const { clientId } = e.detail || {};
+      if (!clientId) return;
+      setPosts((prev) => prev.filter((p) => p.clientId !== clientId));
+    };
+
+    window.addEventListener(POST_CREATED, prependPost);
+    window.addEventListener(POST_REPLACED, replacePost);
+    window.addEventListener(POST_CREATE_FAILED, rollbackPost);
+    return () => {
+      window.removeEventListener(POST_CREATED, prependPost);
+      window.removeEventListener(POST_REPLACED, replacePost);
+      window.removeEventListener(POST_CREATE_FAILED, rollbackPost);
+    };
+  }, []);
 
   // Notify GSAP hooks to animate newly rendered cards
   useEffect(() => {
@@ -105,21 +148,21 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
         const isOwner = Number(window.authUserId) === Number(post.user_id) || window.userRole === 'admin';
 
         return (
-          <article key={post.id} className="post-card bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+          <article key={post.clientId || post.id} className={`post-card bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden transition-opacity ${post.pending ? 'opacity-70' : ''}`}>
             {/* Post Header */}
             <div className="flex items-center justify-between p-4">
               <div className="flex items-center space-x-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center text-white font-bold ring-2 ring-white dark:ring-gray-800">
+                <div className="h-10 w-10 rounded-full bg-brand-900 text-white flex items-center justify-center font-bold">
                   {userInitial}
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm">{post.user?.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{formatDate(post.created_at)}</p>
+                  <p className="font-semibold text-brand-900 dark:text-white text-sm">{post.user?.name}</p>
+                  <p className="text-xs text-brand-400 dark:text-gray-500">{formatDate(post.created_at)}</p>
                 </div>
               </div>
 
               {isOwner && (
-                <div className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                <div className="text-brand-300 hover:text-brand-500 dark:hover:text-gray-300">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
                   </svg>
@@ -153,8 +196,8 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
                   />
 
                   <a
-                    href={`/posts/${post.id}#comments`}
-                    className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                    href={post.id ? `/posts/${post.id}#comments` : '#'}
+                    className="flex items-center space-x-1 text-brand-500 dark:text-gray-400 hover:text-brand-900 dark:hover:text-white transition"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -168,7 +211,7 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
                   </a>
                 </div>
 
-                <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                <button className="text-brand-300 hover:text-brand-500 dark:hover:text-gray-300">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                   </svg>
@@ -178,33 +221,35 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
 
             {/* Post Content */}
             <div className="p-4">
-              <a href={`/posts/${post.id}`}>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition">
+              <a href={post.id ? `/posts/${post.id}` : '#'}>
+                <h2 className="text-xl font-bold text-brand-900 dark:text-white mb-2 hover:text-brand-600 dark:hover:text-brand-300 transition">
                   {post.title}
                 </h2>
               </a>
 
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+              <p className="text-brand-600 dark:text-gray-300 leading-relaxed mb-3">
                 {truncate(post.content, 150)}
               </p>
 
-              <a
-                href={`/posts/${post.id}`}
-                className="inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition"
-              >
-                Read More
-                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </a>
+              {post.id && (
+                <a
+                  href={`/posts/${post.id}`}
+                  className="inline-flex items-center text-brand-900 dark:text-brand-100 font-semibold hover:text-brand-600 dark:hover:text-brand-300 transition"
+                >
+                  Read More
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              )}
             </div>
           </article>
         );
       })}
 
       {loading && (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="flex justify-center py-6">
+          <div className="animate-spin rounded-full h-10 w-10 border-2 border-brand-200 border-t-brand-900"></div>
         </div>
       )}
 
@@ -215,26 +260,19 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
       )}
 
       {hasMore && !loading && (
-        <div ref={observerTarget} className="h-16"></div>
+        <div ref={observerTarget} className="h-12"></div>
       )}
 
       {!hasMore && posts.length > 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl">
-          <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <p className="text-gray-600 dark:text-gray-400 font-medium">You've reached the end! 🎉</p>
-          <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">That's all the posts we have for now.</p>
+        <div className="text-center py-6">
+          <p className="text-brand-400 dark:text-gray-500 font-medium">You've reached the end.</p>
         </div>
       )}
 
       {posts.length === 0 && !loading && (
-        <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-2xl">
-          <svg className="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-          </svg>
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No posts found</h3>
-          <p className="text-gray-600 dark:text-gray-400">Try adjusting your filters</p>
+        <div className="text-center py-8">
+          <p className="text-xl font-semibold text-brand-900 dark:text-white mb-2">No posts found</p>
+          <p className="text-brand-500 dark:text-gray-400">Try adjusting your filters</p>
         </div>
       )}
     </div>

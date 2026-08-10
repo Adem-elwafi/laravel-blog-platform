@@ -5,25 +5,25 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ url('/') }}" class="text-xl font-bold text-blue-600 dark:text-blue-400">
+                    <a href="{{ url('/') }}" class="text-xl font-bold text-brand-900 dark:text-white">
                         {{ config('app.name', 'Blog Platform') }}
                     </a>
                 </div>
 
                 <!-- Navigation Links (Desktop) -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <a href="{{ url('/') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->is('/') ? 'border-blue-500 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-gray-300 hover:text-gray-900 dark:hover:text-gray-100' }}">
+                    <a href="{{ url('/') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->is('/') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
                         {{ __('Home') }}
                     </a>
-                    <a href="{{ route('posts.index') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('posts.*') ? 'border-blue-500 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-gray-300 hover:text-gray-900 dark:hover:text-gray-100' }}">
+                    <a href="{{ route('posts.index') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('posts.*') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
                         {{ __('Posts') }}
                     </a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('dashboard') ? 'border-blue-500 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-gray-300 hover:text-gray-900 dark:hover:text-gray-100' }}">
+                        <a href="{{ route('dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('dashboard') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
                             {{ __('Dashboard') }}
                         </a>
                         @if(Auth::user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('admin.*') ? 'border-blue-500 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-gray-300 hover:text-gray-900 dark:hover:text-gray-100' }}">
+                            <a href="{{ route('admin.dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('admin.*') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
                                 {{ __('Admin Dashboard') }}
                             </a>
                         @endif
@@ -34,18 +34,11 @@
             <!-- Right Side Navigation -->
             <div class="hidden sm:flex sm:items-center sm:space-x-4">
                 @auth
-                    <a href="{{ route('posts.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-lg text-sm font-medium transition" aria-label="Create new post">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        {{ __('Create') }}
-                    </a>
-                    
                     <!-- User Dropdown -->
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none transition ease-in-out duration-150">
-                                <span class="h-8 w-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold mr-2">
+                                <span class="h-8 w-8 bg-brand-900 text-white rounded-full flex items-center justify-center text-sm font-semibold mr-2">
                                     {{ substr(Auth::user()->name, 0, 1) }}
                                 </span>
                                 <div class="hidden sm:block">{{ Auth::user()->name }}</div>
@@ -80,7 +73,7 @@
                         {{ __('Login') }}
                     </a>
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white rounded-lg font-medium transition">
+                        <a href="{{ route('register') }}" class="px-4 py-2 bg-brand-900 hover:bg-brand-800 dark:bg-brand-800 dark:hover:bg-brand-700 text-white rounded-lg font-medium transition">
                             {{ __('Register') }}
                         </a>
                     @endif
@@ -117,9 +110,6 @@
                         {{ __('Admin') }}
                     </a>
                 @endif
-                <a href="{{ route('posts.create') }}" class="block px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
-                    {{ __('Create Post') }}
-                </a>
             @endauth
         </div>
 
