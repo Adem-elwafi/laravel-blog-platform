@@ -108,14 +108,14 @@ export default function Comments({ postId, user, initialComments, csrfToken }) {
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                             placeholder="Write a comment..."
-                            className="w-full p-3 mb-4 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            className="w-full p-3 mb-4 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-brand-900 focus:border-transparent"
                             rows="3"
                             disabled={loading}
                         />
                         <button
                             type="submit"
                             disabled={!newComment.trim() || loading}
-                            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Posting...' : 'Post Comment'}
                         </button>
@@ -124,7 +124,7 @@ export default function Comments({ postId, user, initialComments, csrfToken }) {
             ) : (
                 <div className="mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                     <p className="text-gray-700 dark:text-gray-300">
-                        <a href="/login" className="text-purple-600 hover:underline dark:text-purple-400">
+                        <a href="/login" className="text-brand-900 hover:underline dark:text-brand-300">
                             Sign in
                         </a> to comment
                     </p>
@@ -146,7 +146,7 @@ export default function Comments({ postId, user, initialComments, csrfToken }) {
                             <div className="flex items-start space-x-4">
                                 {/* User avatar */}
                                 <div className="flex-shrink-0">
-                                    <div className="h-10 w-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+                                    <div className="h-10 w-10 bg-gradient-to-br from-brand-900 to-brand-700 rounded-full flex items-center justify-center text-white font-semibold">
                                         {getUserInitial(comment.user?.name)}
                                     </div>
                                 </div>

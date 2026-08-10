@@ -33,10 +33,18 @@ class ProfileController extends Controller
             ->latest()
             ->paginate(9);
 
-        return view('profile.show', [
-            'user' => $user,
-            'posts' => $posts,
-        ]);
+        // Real stats only — totals across all of the user's posts.
+        $postCount = $user->posts()->count();
+        $likesReceived = $user->posts()->withCount('likes')->get()->sum('likes_count');
+        $commentsReceived = $user->posts()->withCount('comments')->get()->sum('comments_count');
+
+        return view('profile.show', compact(
+            'user',
+            'posts',
+            'postCount',
+            'likesReceived',
+            'commentsReceived'
+        ));
     }
 
     /**

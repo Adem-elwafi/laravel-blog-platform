@@ -39,7 +39,7 @@ export default function FriendRequests() {
 
   if (isLoading) {
     return (
-      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="p-panel bg-white dark:bg-gray-800 rounded-2xl border border-brand-100 dark:border-gray-700 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Friend Requests</h3>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
@@ -52,7 +52,7 @@ export default function FriendRequests() {
 
   if (errorBanner && incoming.length === 0 && outgoing.length === 0) {
     return (
-      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="p-panel bg-white dark:bg-gray-800 rounded-2xl border border-brand-100 dark:border-gray-700 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Friend Requests</h3>
         <p className="text-sm text-red-600 dark:text-red-400">Could not load requests</p>
       </div>
@@ -61,7 +61,7 @@ export default function FriendRequests() {
 
   if (incoming.length === 0 && outgoing.length === 0) {
     return (
-      <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
+      <div className="p-panel bg-white dark:bg-gray-800 rounded-2xl border border-brand-100 dark:border-gray-700 shadow-sm">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Friend Requests</h3>
         <p className="text-sm text-gray-500 dark:text-gray-400">No pending requests</p>
       </div>
@@ -85,7 +85,7 @@ export default function FriendRequests() {
             {incoming.map((req) => (
               <li key={req.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3 min-w-0">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                  <div className="w-10 h-10 bg-gradient-to-br from-brand-900 to-brand-700 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
                     {req.user?.name ? req.user.name.charAt(0).toUpperCase() : '?'}
                   </div>
                   <span className="text-sm font-medium text-gray-900 dark:text-white truncate">
@@ -96,7 +96,7 @@ export default function FriendRequests() {
                   <button
                     onClick={() => respond(req.id, 'accept')}
                     disabled={busyId === req.id}
-                    className="px-3 py-1.5 text-sm bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1.5 text-sm bg-accent hover:bg-accent-600 text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Accept
                   </button>
@@ -123,7 +123,7 @@ export default function FriendRequests() {
             {outgoing.map((req) => (
               <li key={req.id} className="flex items-center justify-between">
                 <div className="flex items-center space-x-3 min-w-0">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                  <div className="w-10 h-10 bg-gradient-to-br from-brand-900 to-brand-700 rounded-full flex items-center justify-center text-white font-semibold text-sm shrink-0">
                     {req.user?.name ? req.user.name.charAt(0).toUpperCase() : '?'}
                   </div>
                   <span className="text-sm font-medium text-gray-900 dark:text-white truncate">

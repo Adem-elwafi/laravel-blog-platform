@@ -4,7 +4,7 @@
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-2">
                 <a href="{{ route('posts.index') }}" 
-                   class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200">
+                   class="text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-300 transition-colors duration-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
@@ -38,7 +38,7 @@
                                value="{{ old('title', $post->title) }}"
                                required
                                placeholder="Enter a descriptive title"
-                               class="pl-10 w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-3 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
+                               class="pl-10 w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-3 focus:ring-brand-900 focus:border-brand-900 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400">
                     </div>
                     @error('title')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
@@ -73,7 +73,7 @@
                             name="image" 
                             id="image"
                             accept="image/*"
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900/30 dark:file:text-blue-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 focus:outline-none focus:border-brand-900 focus:ring-4 focus:ring-brand-900/10 transition-all duration-200"
                         >
                         @error('image')
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
@@ -96,7 +96,7 @@
                     <div id="imagePreview" class="mt-4 hidden">
                         <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Image Preview:</p>
                         <div class="relative inline-block">
-                            <img src="" alt="Preview" class="max-w-md w-full rounded-lg shadow-lg border-2 border-blue-300 dark:border-blue-600">
+                            <img src="" alt="Preview" class="max-w-md w-full rounded-lg shadow-lg border-2 border-brand-300 dark:border-brand-900">
                             <button type="button" 
                                     onclick="clearImagePreview()"
                                     class="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition-colors duration-200">
@@ -125,7 +125,7 @@
                                   rows="8"
                                   required
                                   placeholder="Write your post content here..."
-                                  class="pl-10 w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-3 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none">{{ old('content', $post->content) }}</textarea>
+                                  class="pl-10 w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-3 focus:ring-brand-900 focus:border-brand-900 transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none">{{ old('content', $post->content) }}</textarea>
                     </div>
                     @error('content')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
@@ -152,7 +152,7 @@
                             Cancel
                         </a>
                         <button type="submit"
-                                class="group relative px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/20">
+                                class="group relative px-8 py-3 bg-gradient-to-r from-brand-900 to-brand-800 hover:from-brand-800 hover:to-brand-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-brand-900/20">
                             <span class="flex items-center gap-2">
                                 <svg class="w-5 h-5 group-hover:rotate-12 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -166,14 +166,14 @@
         </div>
 
         <!-- Additional Info -->
-        <div class="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl">
+        <div class="mt-8 p-6 bg-brand-50 dark:bg-brand-900/20 border border-brand-200 dark:border-brand-800 rounded-2xl">
             <div class="flex items-start gap-3">
-                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-6 h-6 text-brand-600 dark:text-brand-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 <div>
-                    <h3 class="font-semibold text-blue-800 dark:text-blue-300 mb-1">Editing Tips</h3>
-                    <p class="text-sm text-blue-700 dark:text-blue-400">
+                    <h3 class="font-semibold text-brand-800 dark:text-brand-300 mb-1">Editing Tips</h3>
+                    <p class="text-sm text-brand-700 dark:text-brand-400">
                         Make sure your title is clear and descriptive. Your content should be well-structured and engaging.
                     </p>
                 </div>

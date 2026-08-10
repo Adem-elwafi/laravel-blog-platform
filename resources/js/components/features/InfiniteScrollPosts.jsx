@@ -141,17 +141,17 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
   };
 
   return (
-    <div className="space-y-6" id="posts-feed">
+    <div className="space-y-5" id="posts-feed">
       {posts.map(post => {
         const userInitial = post.user?.name?.charAt(0)?.toUpperCase() || '?';
         const imageUrl = post.image ? `/storage/${post.image}` : null;
         const isOwner = Number(window.authUserId) === Number(post.user_id) || window.userRole === 'admin';
 
         return (
-          <article key={post.clientId || post.id} className={`post-card bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden transition-opacity ${post.pending ? 'opacity-70' : ''}`}>
+          <article key={post.clientId || post.id} className={`post-card bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-brand-100 dark:border-gray-700 divide-y divide-brand-100 dark:divide-gray-700 overflow-hidden transition-opacity ${post.pending ? 'opacity-70' : ''}`}>
             {/* Post Header */}
-            <div className="flex items-center justify-between p-4">
-              <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-between px-panel py-3">
+              <div className="flex items-center gap-avatar">
                 <div className="h-10 w-10 rounded-full bg-brand-900 text-white flex items-center justify-center font-bold">
                   {userInitial}
                 </div>
@@ -172,12 +172,12 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
 
             {/* Post Image */}
             {imageUrl && (
-              <div className="relative">
+              <div className="px-panel py-3">
                 <a href={`/posts/${post.id}`}>
                   <img
                     src={imageUrl}
                     alt={post.title}
-                    className="w-full h-auto max-h-[600px] object-cover cursor-pointer hover:opacity-95 transition-opacity"
+                    className="w-full h-auto max-h-[600px] object-cover cursor-pointer hover:opacity-95 transition-opacity rounded-xl"
                     loading="lazy"
                   />
                 </a>
@@ -185,7 +185,7 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
             )}
 
             {/* Engagement Bar */}
-            <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+            <div className="px-panel py-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <LikeButton
@@ -220,7 +220,7 @@ export default function InfiniteScrollPosts({ initialPosts = [], currentPage = 1
             </div>
 
             {/* Post Content */}
-            <div className="p-4">
+            <div className="px-panel py-3">
               <a href={post.id ? `/posts/${post.id}` : '#'}>
                 <h2 className="text-xl font-bold text-brand-900 dark:text-white mb-2 hover:text-brand-600 dark:hover:text-brand-300 transition">
                   {post.title}

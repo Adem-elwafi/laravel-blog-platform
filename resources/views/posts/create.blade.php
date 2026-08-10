@@ -71,7 +71,7 @@
                     <div class="mb-10">
                         <div class="flex items-center justify-between mb-4">
                             <label class="block text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 mr-2 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                                 Your Story
@@ -86,7 +86,7 @@
                                 maxlength="5000"
                                 required
                                 placeholder="Share your thoughts, experiences, or expertise. What do you want to tell the world?"
-                                class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-base text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none"
+                                class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-base text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-brand-900 focus:ring-4 focus:ring-brand-900/10 transition-all duration-200 resize-none"
                                 oninput="updateContentCounter()"></textarea>
                             @error('content')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
@@ -105,7 +105,7 @@
                     <!-- Image Upload Section -->
                     <div class="mb-10">
                         <label class="block text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 mr-2 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                             Post Image (Optional)
@@ -116,7 +116,7 @@
                                 name="image" 
                                 id="image"
                                 accept="image/*"
-                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100 dark:file:bg-pink-900/30 dark:file:text-pink-400 focus:outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 transition-all duration-200"
+                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400 focus:outline-none focus:border-brand-900 focus:ring-4 focus:ring-brand-900/10 transition-all duration-200"
                             >
                             @error('image')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center">
@@ -150,7 +150,7 @@
                     <!-- Category Selection (Optional Enhancement) -->
                     <div class="mb-10">
                         <label class="block text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 mr-2 text-brand-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                             </svg>
                             Category (Optional)
@@ -162,7 +162,7 @@
                             @foreach($categories as $category)
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="category" value="{{ $category }}" class="sr-only peer">
-                                    <div class="px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-center font-medium transition-all duration-200 peer-checked:bg-gradient-to-r peer-checked:from-purple-500 peer-checked:to-pink-500 peer-checked:text-white peer-checked:shadow-lg">
+                                    <div class="px-4 py-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg text-center font-medium transition-all duration-200 peer-checked:bg-gradient-to-r peer-checked:from-brand-900 peer-checked:to-brand-800 peer-checked:text-white peer-checked:shadow-lg">
                                         {{ $category }}
                                     </div>
                                 </label>
@@ -210,10 +210,10 @@
             </div>
 
             <!-- Writing Tips -->
-            <div class="mt-8 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border border-blue-100 dark:border-blue-800 rounded-2xl p-6">
+            <div class="mt-8 bg-gradient-to-r from-brand-50 to-brand-50 dark:from-brand-900/20 dark:to-brand-900/20 border border-brand-100 dark:border-brand-800 rounded-2xl p-6">
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
-                        <svg class="w-6 h-6 text-blue-500 dark:text-blue-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-brand-500 dark:text-brand-400 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>

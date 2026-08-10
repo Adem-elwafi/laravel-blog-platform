@@ -3,7 +3,7 @@
         <!-- Post Header -->
         <header class="mb-8">
             <div class="mb-4 flex flex-wrap gap-2">
-                <span class="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-semibold rounded-full">
+                <span class="inline-block px-3 py-1 bg-brand-100 dark:bg-brand-900 text-brand-800 dark:text-brand-200 text-xs font-semibold rounded-full">
                     Article
                 </span>
             </div>
@@ -15,7 +15,7 @@
             <!-- Post Meta -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 dark:border-gray-700 pb-4">
                 <div class="flex items-center space-x-4 mb-4 sm:mb-0">
-                    <div class="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    <div class="h-12 w-12 bg-brand-900 rounded-full flex items-center justify-center text-white font-bold">
                         {{ substr($post->user->name, 0, 1) }}
                     </div>
                     <div>

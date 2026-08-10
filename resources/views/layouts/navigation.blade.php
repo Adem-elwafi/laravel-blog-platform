@@ -19,8 +19,8 @@
                         {{ __('Posts') }}
                     </a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('dashboard') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
-                            {{ __('Dashboard') }}
+                        <a href="{{ route('friends.index') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('friends.*') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
+                            {{ __('Friends') }}
                         </a>
                         @if(Auth::user()->role === 'admin')
                             <a href="{{ route('admin.dashboard') }}" class="px-1 pt-1 border-b-2 text-base font-medium {{ request()->routeIs('admin.*') ? 'border-brand-900 text-gray-900 dark:text-white' : 'border-transparent text-gray-600 dark:text-gray-300 hover:border-brand-200 hover:text-gray-900 dark:hover:text-gray-100' }}">
@@ -102,8 +102,8 @@
                 {{ __('Posts') }}
             </a>
             @auth
-                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
-                    {{ __('Dashboard') }}
+                <a href="{{ route('friends.index') }}" class="block px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
+                    {{ __('Friends') }}
                 </a>
                 @if(Auth::user()->role === 'admin')
                     <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">

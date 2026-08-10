@@ -19,7 +19,7 @@
         <style>
             /* Custom Gradient Text Effect */
             .gradient-text {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                background: linear-gradient(135deg, #111111 0%, #262626 50%, #404040 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
@@ -47,7 +47,7 @@
                 left: 0;
                 width: 100%;
                 height: 4px;
-                background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                background: linear-gradient(90deg, #111111 0%, #262626 50%, #404040 100%);
                 z-index: 9999;
                 transform-origin: left;
                 transform: scaleX(0);
@@ -61,7 +61,7 @@
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #111111 0%, #262626 100%);
                 color: white;
                 display: flex;
                 align-items: center;
@@ -130,7 +130,7 @@
             
             /* Gradient Background for Hero */
             .hero-gradient {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                background: linear-gradient(135deg, #111111 0%, #262626 50%, #404040 100%);
                 position: relative;
                 overflow: hidden;
             }
@@ -142,7 +142,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #111111 0%, #262626 100%);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -187,26 +187,26 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo -->
-                    <a href="{{ route('welcome') }}" class="text-2xl font-bold text-white hover:text-purple-300 transition-colors">
+                    <a href="{{ route('welcome') }}" class="text-2xl font-bold text-white hover:text-brand-200 transition-colors">
                         {{ config('app.name', 'Blog Platform') }}
                     </a>
                     
                     <!-- Navigation Links -->
                     <div class="hidden md:flex items-center space-x-8">
-                        <a href="#featured" class="text-white hover:text-purple-300 transition-colors nav-link">Featured</a>
-                        <a href="#stats" class="text-white hover:text-purple-300 transition-colors nav-link">Stats</a>
-                        <a href="{{ route('posts.index') }}" class="text-white hover:text-purple-300 transition-colors nav-link">All Posts</a>
+                        <a href="#featured" class="text-white hover:text-brand-200 transition-colors nav-link">Featured</a>
+                        <a href="#stats" class="text-white hover:text-brand-200 transition-colors nav-link">Stats</a>
+                        <a href="{{ route('posts.index') }}" class="text-white hover:text-brand-200 transition-colors nav-link">All Posts</a>
                         
                         @auth
                             <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-all">Dashboard</a>
                         @else
-                            <a href="{{ route('login') }}" class="text-white hover:text-purple-300 transition-colors">Login</a>
+                            <a href="{{ route('login') }}" class="text-white hover:text-brand-200 transition-colors">Login</a>
                             <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-all">Sign Up</a>
                         @endauth
                     </div>
                     
                     <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="md:hidden text-white hover:text-purple-300 transition-colors">
+                    <button id="mobileMenuBtn" class="md:hidden text-white hover:text-brand-200 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -217,14 +217,14 @@
             <!-- Mobile Menu -->
             <div id="mobileMenu" class="md:hidden hidden bg-black/30 backdrop-blur-lg">
                 <div class="px-4 pt-2 pb-4 space-y-3">
-                    <a href="#featured" class="block text-white hover:text-purple-300 transition-colors py-2">Featured</a>
-                    <a href="#stats" class="block text-white hover:text-purple-300 transition-colors py-2">Stats</a>
-                    <a href="{{ route('posts.index') }}" class="block text-white hover:text-purple-300 transition-colors py-2">All Posts</a>
+                    <a href="#featured" class="block text-white hover:text-brand-200 transition-colors py-2">Featured</a>
+                    <a href="#stats" class="block text-white hover:text-brand-200 transition-colors py-2">Stats</a>
+                    <a href="{{ route('posts.index') }}" class="block text-white hover:text-brand-200 transition-colors py-2">All Posts</a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="block text-white hover:text-purple-300 transition-colors py-2">Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="block text-white hover:text-brand-200 transition-colors py-2">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="block text-white hover:text-purple-300 transition-colors py-2">Login</a>
-                        <a href="{{ route('register') }}" class="block text-white hover:text-purple-300 transition-colors py-2">Sign Up</a>
+                        <a href="{{ route('login') }}" class="block text-white hover:text-brand-200 transition-colors py-2">Login</a>
+                        <a href="{{ route('register') }}" class="block text-white hover:text-brand-200 transition-colors py-2">Sign Up</a>
                     @endauth
                 </div>
             </div>
@@ -251,15 +251,15 @@
                 
                 <!-- CTA Buttons -->
                 <div class="hero-cta flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 will-animate">
-                    <a href="{{ route('posts.index') }}" class="px-8 py-4 bg-white text-purple-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg hover:shadow-2xl">
+                    <a href="{{ route('posts.index') }}" class="px-8 py-4 bg-white text-brand-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg hover:shadow-2xl">
                         Explore Posts
                     </a>
                     @guest
-                        <a href="{{ route('register') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-purple-600 transition-all shadow-lg hover:shadow-2xl">
+                        <a href="{{ route('register') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-600 transition-all shadow-lg hover:shadow-2xl">
                             Join Community
                         </a>
                     @else
-                        <a href="{{ route('posts.create') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-purple-600 transition-all shadow-lg hover:shadow-2xl">
+                        <a href="{{ route('posts.create') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-600 transition-all shadow-lg hover:shadow-2xl">
                             Create Post
                         </a>
                     @endguest
@@ -313,7 +313,7 @@
                         @foreach($featuredPosts as $post)
                             <article class="post-card bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden will-animate">
                                 <!-- Post Image Placeholder -->
-                                <div class="post-image h-48 bg-gradient-to-br from-purple-400 to-pink-400 relative overflow-hidden">
+                                <div class="post-image h-48 bg-gradient-to-br from-brand-800 to-brand-700 relative overflow-hidden">
                                     <div class="absolute inset-0 flex items-center justify-center text-white">
                                         <svg class="w-16 h-16 opacity-50" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4zm2 2h8v4H6V8z"/>
@@ -324,7 +324,7 @@
                                 <!-- Post Content -->
                                 <div class="p-6">
                                     <!-- Post Title -->
-                                    <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                                    <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
                                         <a href="{{ route('posts.show', $post) }}">{{ Str::limit($post->title, 60) }}</a>
                                     </h3>
                                     
@@ -336,7 +336,7 @@
                                     <!-- Post Meta -->
                                     <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-500">
                                         <div class="flex items-center space-x-2">
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-800 to-brand-700 flex items-center justify-center text-white font-semibold">
                                                 {{ substr(optional($post->user)->name ?? '?', 0, 1) }}
                                             </div>
                                             <span>{{ optional($post->user)->name ?? 'Unknown author' }}</span>
@@ -366,7 +366,7 @@
                     
                     <!-- View All Posts Button -->
                     <div class="text-center mt-12">
-                        <a href="{{ route('posts.index') }}" class="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all">
+                        <a href="{{ route('posts.index') }}" class="inline-block px-8 py-4 bg-gradient-to-r from-brand-900 to-brand-800 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all">
                             View All Posts
                         </a>
                     </div>
@@ -374,7 +374,7 @@
                     <div class="text-center py-12">
                         <p class="text-xl text-gray-600 dark:text-gray-400">No posts yet. Be the first to create one!</p>
                         @auth
-                            <a href="{{ route('posts.create') }}" class="inline-block mt-6 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all">
+                            <a href="{{ route('posts.create') }}" class="inline-block mt-6 px-8 py-4 bg-gradient-to-r from-brand-900 to-brand-800 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all">
                                 Create First Post
                             </a>
                         @endauth
@@ -384,7 +384,7 @@
         </section>
         
         <!-- Stats Section with Animated Counters -->
-        <section id="stats" class="stats-section py-20 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 relative overflow-hidden">
+        <section id="stats" class="stats-section py-20 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-950 relative overflow-hidden">
             <!-- Background Pattern -->
             <div class="absolute inset-0 opacity-10">
                 <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
@@ -443,7 +443,7 @@
         <!-- Call-to-Action Section -->
         <section class="cta-section py-20 bg-gray-50 dark:bg-gray-800">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="cta-content max-w-4xl mx-auto text-center bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl will-animate">
+                <div class="cta-content max-w-4xl mx-auto text-center bg-gradient-to-r from-brand-900 to-brand-800 rounded-3xl p-12 shadow-2xl will-animate">
                     <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
                         Ready to Share Your Story?
                     </h2>
@@ -452,15 +452,15 @@
                     </p>
                     @guest
                         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-purple-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg">
+                            <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-brand-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg">
                                 Get Started Free
                             </a>
-                            <a href="{{ route('posts.index') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-purple-600 transition-all">
+                            <a href="{{ route('posts.index') }}" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white hover:text-brand-600 transition-all">
                                 Browse Posts
                             </a>
                         </div>
                     @else
-                        <a href="{{ route('posts.create') }}" class="inline-block px-8 py-4 bg-white text-purple-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg">
+                        <a href="{{ route('posts.create') }}" class="inline-block px-8 py-4 bg-white text-brand-600 rounded-full font-semibold text-lg hover:bg-gray-100 hover:scale-105 transition-all shadow-lg">
                             Create Your First Post
                         </a>
                     @endauth
