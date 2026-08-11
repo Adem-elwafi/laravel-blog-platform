@@ -1,51 +1,63 @@
 # blog-platform — Current State
 
-Snapshot of what works, what doesn't, and what's rough. Update as things change.
+Snapshot of what works, what's open, and what's deferred. Update as things change.
 
-## Verified working (SSO end-to-end)
+## Working today
 
-- Login on blog `:8001` → shared session cookie (`blog_chat_session`) is written to the
-  shared `sessions` table.
-- The same cookie authenticates chat's stateful API: calling
-  `GET http://localhost:8000/api/friends` from blog's origin with credentials returns
-  `200 {"data": []}`; the same request **without** the blog `Origin` header returns `401`.
-- Blog React islands hit chat's `/api/friend-requests`, `/api/friends`, and
-  `/broadcasting/auth` cross-origin with `credentials: 'include'` and a refreshed
-  `X-XSRF-TOKEN`.
-- Friend-request flow (send → accept → list) works against the shared DB.
+**SSO end-to-end**
+- Login on blog `:8001` writes the shared session (`blog_chat_session` cookie → shared
+  `sessions` table); the same cookie authenticates chat's stateful API. Logging into one
+  app signs you into both.
 
-## Real-time
+**Friend requests, from the blog UI**
+- Dedicated `/friends` page (Facebook-style, 3-column) renders the `FriendRequests` and
+  `FriendList` islands; profile pages render `AddFriendButton`.
+- All friendship traffic goes cross-origin to chat's API (`friendshipApi` → `csrfFetch`
+  with CSRF refresh + 419 retry): send / accept / decline work against the shared DB.
 
-- blog's `resources/js/echo.js` connects a client to chat's Reverb server (`:8081`) and
-  listens on `friends.{userId}` → dispatches `friendship:updated` to drive the UI.
-- Broadcasting is server-owned by realtime-chat; blog never broadcasts.
+**Live real-time updates**
+- blog's Echo client receives `friendship:updated` on the private `friends.{id}` channel
+  (served by chat's Reverb) and refetches — request lists and buttons update without a
+  reload. Works because of the custom cross-origin channel authorizer (ADR-006).
 
-## Data hygiene (Phase 1 cleanup)
+**Posts & feed**
+- In-feed composer (`PostComposer`) with optimistic insert: dispatches `post:created`
+  (pending card), server confirm swaps in the real `PostResource` (`post:replaced`), and
+  failures roll back (`post:create-failed`).
+- `PostFilters`, `InfiniteScrollPosts` (via `GET /api/posts/feed`), JSON paths for
+  like/comment actions. Form Requests (`StorePostRequest`, `UpdatePostRequest`,
+  `StoreCommentRequest`) + API Resources (`PostResource`, `CommentResource`) in place.
+- `/posts/create` is kept as a fallback classic composer (image upload, character
+  counters, draft) — still linked from the nav rail (ADR-008).
 
-- User accounts reduced to the meaningful set: **1** (Adem lwafi — owner), **3** (Yahya
-  Elwafi), **4** (jawed Elwafi — kept; real conversation), **5** (yahya lwafi), **10**
-  (med Wafi). Deleted: test/duplicate users 11, 17, 18, 19, 20 + orphaned sessions + one
-  dangling message.
-- Conversations: **2** (1↔3), **3** (1↔4, has messages), **4** (1↔5, empty).
-- Blog dev tooling: `laravel/pail` removed from `require-dev`; `composer run dev` =
-  server + queue + vite only. Both repos committed (blog `07c52d6`, chat `2a84e1a`).
+**Profile redesign**
+- `profile/show.blade.php`: cover/avatar header, real stats (posts / likes / comments —
+  no fake follower system), tabs + paginated feed, About sidebar, `AddFriendButton` when
+  viewing someone else's profile.
 
-## Known-incomplete / open
+**Navigation**
+- `/dashboard` redirects to `/friends` (ADR-009); the Breeze dashboard stub is gone.
 
-- **Messaging list scoping:** chat's conversation list is not yet restricted to friends
-  (open design decision; not a bug — tracked in chat's docs).
-- **No `migrate:fresh` guard:** only a convention protects `shared_app_db` (ADR-002).
-- **`role` on User:** the `role` column exists on `users` (added by blog's migration) and
-  `AdminUserSeeder` assigns it, but `User::$fillable` omits `role`, so mass assignment
-  silently drops it. Flagged for Phase 2 fix.
+## Test coverage
 
-## Structurally rough (Phase 2 targets)
+- Only Breeze default tests (auth + profile). No feature tests yet for the feed or friend
+  UI on the blog side — friendship behavior is covered server-side by chat's
+  `ChatFriendshipGuardTest`.
 
-- No API Resources yet — `PostController::transformPost()` and raw model arrays are
-  returned instead.
-- Inline `$request->validate()` in `PostController`, `CommentController` instead of Form
-  Requests.
-- Duplicated CSRF-fresh-fetch logic in `resources/js/utils/chatApi.js` (same pattern as
-  chat's `auth-forms.js`).
-- `FriendshipStatus` enum duplicated in both apps (chat is canonical) — noted in chat's
-  decisions; blog copy is kept in sync by convention.
+## Open / deferred
+
+- **Unified app name + logo** across both apps — explicitly held for a direct user
+  decision. Not to be chosen by any agent.
+- **Feature backlog** (brainstorm only, not committed): background customization, chat
+  image uploads.
+- **Block-user UI:** the backend action exists in chat (`BlockUserAction`,
+  `POST /api/friend-requests/{friendship}/block`) but there is no UI anywhere yet.
+- **No `migrate:fresh` guard:** convention only (ADR-002); no code-level guard.
+- **`components/ui/` is empty** — shared presentational primitives not yet extracted.
+
+## Data hygiene (Phase 1, still current)
+
+- Meaningful accounts: **1** (Adem lwafi — owner), **3** (Yahya Elwafi), **4** (jawed
+  Elwafi), **5** (yahya lwafi), **10** (med Wafi). Test/duplicate users (11, 17–20) and
+  orphaned sessions were deleted.
+- `role` is now in `User::$fillable` (the Phase 1 gap is closed).

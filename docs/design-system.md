@@ -1,43 +1,92 @@
 # blog-platform — Design System
 
+Status: Living document. Both apps draw from the same token set — update
+`tailwind.config.js` in **both** repos when a token changes.
+
 ## Baseline
 
-- **Stack:** Tailwind CSS v3 + Laravel Breeze default (Starter Kit UI).
+- **Stack:** Tailwind CSS v3. All custom tokens are defined in `tailwind.config.js`
+  (`theme.extend`).
 - **Font:** Figtree (Breeze default), self-hosted by Laravel.
-- **Dark mode:** enabled in the app; toggled on the public pages.
+- **Dark mode:** `'class'` strategy — toggled by adding/removing a class on `<html>`.
 
-## Visual language
+## Color tokens
 
-- **Backgrounds:** dark gradient panel on the home/landing page (`hero` + feature cards
-  with `bg-gradient-to-*`, glassy overlays) over a light app shell.
-- **Color usage:** brand accent used for primary CTAs; semantic colors for like/comment
-  actions and admin actions.
-- **Type scale:** default Tailwind; headings inherit the Figtree stack.
+### `brand` — the single identity color (near-black)
 
-## Components (source of truth)
+| Shade | Hex |
+|---|---|
+| 50 | `#F7F7F7` |
+| 100 | `#EDEDED` |
+| 200 | `#E2E2E2` |
+| 300 | `#D4D4D4` |
+| 400 | `#A3A3A3` |
+| 500 | `#737373` |
+| 600 | `#525252` |
+| 700 | `#404040` |
+| 800 | `#262626` |
+| **900** | **`#111111`** |
+| 950 | `#0A0A0A` |
 
-- Live React islands under `resources/js/components/`:
-  - `InfiniteScrollPosts` — paginated feed card list (uses `data-initial-posts`).
-  - `Comments` — comment thread + composer.
-  - `FriendRequests`, `AddFriendButton`, `FriendList` — chat-driven social UI.
-- Blade views under `resources/views/` (Breeze + posts/feed) provide the SSR shell the
-  islands mount into.
+**`brand-900` (`#111111`) is the hero color** (ADR-007). It carries all brand moments:
 
-## Motion & interaction
+- Primary buttons: `bg-brand-900 hover:bg-brand-800` (e.g. Add Friend, publish, active nav).
+- Focus rings on inputs: `focus:ring-brand-900 focus:border-brand-900`.
+- Dark-mode surfaces and hover states: `dark:bg-brand-900/…`, `dark:hover:bg-brand-800`.
 
-- Subtle entrance animations on landing/hero sections (GSAP is available in the frontend
-  bundle; see `package.json`).
-- Infinite scroll triggers on intersection; optimistic UI on like toggles.
+Light support shades: `brand-50` (tinted fills like `file:bg-brand-50`), `brand-100`
+(hairline card borders `border-brand-100`), `brand-200` (section borders). Dark side uses
+`brand-700`/`brand-800` borders and `brand-900/20` fills.
 
-## Ownership & conventions
+### `accent` — status-only green
 
-- Global tokens/layout live in Blade + `resources/css/app.css`.
-- Component styling is scoped to each JSX component (Tailwind utilities inline).
-- Follow Breeze naming (`bg-primary`, `text-sm text-gray-600`, etc.) where classes are
-  repeated.
+| Shade | Hex |
+|---|---|
+| 50 | `#F0FDF4` |
+| 100 | `#DCFCE7` |
+| **500** | **`#22C55E`** |
+| 600 | `#16A34A` |
+| 700 | `#15803D` |
+| DEFAULT | `#22C55E` |
 
-## Future (Phase 4 — open)
+**`accent` is restricted to status indicators only** (ADR-007): unread badges,
+notification counts, online dots, friend-request count badges. It is never used for
+CTAs or decoration. If a green is doing work that isn't "state", it's a bug — use
+`brand-900` instead.
 
-- A shared, tokenized design system (CSS custom properties, semantic color names) is
-  planned but not yet implemented. blog is currently the more customized app; realtime-chat
-  still ships near-stock Breeze.
+## Density & spacing tokens
+
+Shared spacing tokens (Phase 4a) live under `theme.extend.spacing` in both apps'
+`tailwind.config.js`:
+
+| Token | Value | Typical use |
+|---|---|---|
+| `hairline` | `1px` | 1px borders/hairlines (`border-hairline`) |
+| `card` | `14px` | tight card interiors (`p-card`) |
+| `panel` | `16px` | standard card gutter (`p-panel`, `px-panel`) |
+| `avatar` | `12px` | avatar-to-text gap, tight inline gaps (`gap-avatar`) |
+
+## Radii
+
+- **Cards / panels:** `rounded-2xl` (16px) — feed cards, request panels, profile cards.
+- **Media inside cards:** `rounded-xl` (12px) — post images/thumbnails.
+- Inputs and buttons: `rounded-xl` (12px) where a radius is needed.
+
+## Type
+
+- Default Tailwind type scale; headings inherit the Figtree stack.
+
+## Component conventions
+
+- `resources/js/components/features/` — domain islands (PostComposer, InfiniteScrollPosts,
+  Comments, FriendRequests, FriendList, AddFriendButton, …).
+- `resources/js/components/ui/` — reserved for shared presentational primitives (empty so
+  far).
+- Blade provides the SSR shell; both Blade and JSX use the same tokens inline.
+
+## Shared-token rule (applies to both apps)
+
+Both apps' `tailwind.config.js` ship the **identical** brand/accent/density token set.
+Any new UI work in either app must use these tokens — no new hardcoded hex values or px
+gaps. If a value isn't in the set, extend the shared set in **both** apps'
+`tailwind.config.js` rather than hardcoding a one-off.

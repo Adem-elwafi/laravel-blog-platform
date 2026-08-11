@@ -1,6 +1,7 @@
 # blog-platform — Architecture
 
-Status: Living document. Update when SSO/CORS/Sanctum/session config or the shared-DB ownership split changes.
+Status: Living document. Update when SSO/CORS/Sanctum/session config, the shared-DB ownership
+split, or the patterns described in sections 6–9 change.
 
 ---
 
@@ -17,7 +18,7 @@ created and maintained by exactly one app's migrations.
 
 | Table | Owner | Notes |
 |---|---|---|
-| `users` | realtime-chat | Base `users` migration lives in chat. blog adds the `role` column via its own `add_role_to_users_table` migration. |
+| `users` | realtime-chat | Base `users` migration lives in chat. blog adds the `role` column via its own `add_role_to_users_table` migration (`role` is in `User::$fillable`). |
 | `sessions`, `cache`, `jobs` | realtime-chat | Framework base tables, created by chat's base migrations. `sessions` is the shared SSO session store. |
 | `conversations`, `messages`, `friendships` | realtime-chat | Chat domain. Friend-request logic lives here only (see decisions). |
 | `posts`, `comments`, `likes` | blog-platform | Blog domain. |
@@ -82,22 +83,25 @@ in development.
 
 Because blog's frontend performs cross-origin **writes** to chat with credentials, it must
 send a fresh CSRF token on every POST/PUT/DELETE. The pattern lives in
-`resources/js/utils/chatApi.js`:
+`resources/js/services/csrfFetch.js`:
 
 1. `GET {chat}/sanctum/csrf-cookie` (with `credentials: 'include'`) → chat sets/refreshes
    the `XSRF-TOKEN` cookie.
 2. Read the `XSRF-TOKEN` cookie value.
 3. Send it as the `X-XSRF-TOKEN` header on the actual request.
+4. On HTTP 419 (expired token), refresh and retry once automatically.
 
 This is the "CSRF-fresh-fetch" requirement — the same single fetch won't carry a valid
-token reliably, so the helper always refreshes first. Note this helper is duplicated
-(blog's `chatApi.js` and the chat app's own `auth-forms.js`) — see `current-state.md`.
+token reliably, so the helper always refreshes first. realtime-chat ships the identical
+helper under the same name (`resources/js/services/csrfFetch.js`), so the pattern is
+consistent by convention across both repos.
 
 ---
 
-## 5. Reverb — chat owns it, blog connects as a client
+## 5. Real-time — blog is a Reverb client with a custom cross-origin authorizer
 
-- **realtime-chat owns the Reverb server** (config in chat's `.env`; `BROADCAST_CONNECTION=reverb`) and is the only app that *broadcasts* server-side.
+- **realtime-chat owns the Reverb server** (config in chat's `.env`;
+  `BROADCAST_CONNECTION=reverb`) and is the only app that *broadcasts* server-side.
 - **blog-platform is only a client**: it never broadcasts. Its `resources/js/echo.js`
   connects an Echo client (`broadcaster: 'reverb'`) to chat's Reverb port (`:8081`), uses
   chat's `/broadcasting/auth` as the auth endpoint, and listens on `friends.{userId}` to
@@ -105,9 +109,67 @@ token reliably, so the helper always refreshes first. Note this helper is duplic
 
 So real-time friend-request updates shown in blog actually arrive via chat's Reverb server.
 
+**The channel-authorization call is custom, on purpose.** `echo.js` does *not* use
+pusher-js's default authorizer; it configures `channelAuthorization.customHandler` to POST
+to `{chat}/broadcasting/auth` with `credentials: 'include'` and a freshly refreshed
+`X-XSRF-TOKEN` header. Why the default doesn't work here: pusher-js sends
+channel-authorization requests with `credentials: 'same-origin'`, so a cross-origin auth
+call (blog :8001 → chat :8000) would never carry the shared session cookie and chat would
+reject it with 403. **Do not "simplify" this back to the default authorizer** — it is the
+fix for the 3.5 real-time regression (ADR-006).
+
 ---
 
-## 6. Hard rules (do not violate without human review)
+## 6. Backend architecture — Form Requests → API Resources (Phase 2)
+
+Blog's domain handlers follow a lean boundary pattern:
+
+- **Form Requests** validate and authorize at the edge: `StorePostRequest`,
+  `UpdatePostRequest`, `StoreCommentRequest`, `ProfileUpdateRequest`.
+- **API Resources** shape the JSON the React islands consume: `PostResource` (includes
+  author `{id, name}`, `likes_count`, `comments_count`, `liked`), `CommentResource`.
+- **Controllers** stay thin wiring: `PostController`, `CommentController`,
+  `LikeController`, `ProfileController`, `AdminController`, `FriendController`.
+
+Blog deliberately has **no Action classes** for friendship — the friendship *domain* lives
+entirely in realtime-chat (ADR-003); blog only calls chat's endpoints. Blog-side business
+rules that are heavier than a form request (e.g. post creation flow) live in the
+controller.
+
+---
+
+## 7. Frontend architecture — features + hooks + services (Phase 3)
+
+- `resources/js/components/features/` — feature components: `PostComposer`,
+  `InfiniteScrollPosts`, `Comments`, `LikeButton`, `PostFilters`, `AddFriendButton`,
+  `FriendRequests`, `FriendList`.
+- `resources/js/components/ui/` — reserved for shared presentational primitives (empty so
+  far; only a `.gitkeep`).
+- `resources/js/hooks/` — `useAppEvent` (subscribes to window events),
+  `useFriendship` (`useFriends`, `useFriendRequests`).
+- `resources/js/services/` — `csrfFetch` (cross-origin fetch + CSRF refresh + 419 retry),
+  `friendshipApi` (chat's friendship endpoints), `postApi` (same-origin post/feed
+  endpoints), `appEvents` (the CustomEvent bus).
+- **Mounting:** `mountComponents.js` scans for `<div data-component="Name" data-...>`,
+  parses the `data-*` attributes into props, and mounts the matching React island.
+- **Live updates:** components don't talk to Echo directly. Echo dispatches window events
+  (`friendship:updated`, `post:created`, `post:replaced`, `post:create-failed`) and hooks
+  subscribe via `useAppEvent` — the window CustomEvent bus is the decoupling layer.
+
+---
+
+## 8. Friend-gated messaging (Phase 5)
+
+Friend-gating is enforced **in realtime-chat**, not in blog. Chat's `ChatController`:
+`ensureCanChatWith()` on `chat.show`, an inline `areFriends()` guard in `chat.store`, and a
+friend-only conversation list. Blog participates only on the UI side — its `/friends` page
+and profile `AddFriendButton` surface the state served by chat's `/api/friends` and
+`/api/friend-requests`. See realtime-chat's `docs/architecture.md` §8 for the guard
+details.
+
+---
+
+## 9. Hard rules (do not violate without human review)
 
 - No `migrate:fresh` / `migrate:fresh --seed` against `shared_app_db`.
 - Respect ownership boundaries: blog writes only `posts`/`comments`/`likes` (and the `role`
@@ -118,3 +180,7 @@ So real-time friend-request updates shown in blog actually arrive via chat's Rev
   `APP_KEY`, `SESSION_COOKIE`, `SESSION_DRIVER`, `SANCTUM_STATEFUL_DOMAINS`, `DB_DATABASE`).
 - No cross-repo agent write access to `bootstrap/app.php` / `config/cors.php` /
   `config/sanctum.php` / `.env` without an explicit human sign-off.
+- Keep the custom `channelAuthorization.customHandler` in `resources/js/echo.js` — the
+  default pusher-js authorizer breaks cross-origin channel auth (see §5 / ADR-006).
+- New UI work must use the shared design tokens (brand/accent/density) defined in
+  `tailwind.config.js` — no new hardcoded hex/px (see `docs/design-system.md`).
