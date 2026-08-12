@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'Blog Platform') }} - Share Your Stories</title>
+        <title>{{ config('app.name', 'Tandem') }} - Share Your Stories</title>
         
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -188,7 +188,7 @@
                 <div class="flex justify-between items-center h-16">
                     <!-- Logo -->
                     <a href="{{ route('welcome') }}" class="text-2xl font-bold text-white hover:text-brand-200 transition-colors">
-                        {{ config('app.name', 'Blog Platform') }}
+                        {{ config('app.name', 'Tandem') }}
                     </a>
                     
                     <!-- Navigation Links -->
@@ -474,7 +474,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     <!-- About -->
                     <div>
-                        <h3 class="text-xl font-bold mb-4">{{ config('app.name', 'Blog Platform') }}</h3>
+                        <h3 class="text-xl font-bold mb-4">{{ config('app.name', 'Tandem') }}</h3>
                         <p class="text-gray-400">A modern platform for writers to share their stories and connect with readers.</p>
                     </div>
                     
@@ -522,7 +522,7 @@
                 
                 <!-- Copyright -->
                 <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
-                    <p>&copy; {{ date('Y') }} {{ config('app.name', 'Blog Platform') }}. All rights reserved.</p>
+                    <p>&copy; {{ date('Y') }} {{ config('app.name', 'Tandem') }}. All rights reserved.</p>
                 </div>
             </div>
         </footer>

@@ -4,7 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ config('app.name', 'Blog Platform') }}</title>
+        <title>{{ config('app.name', 'Tandem') }}</title>
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('tandem-icon.svg') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -17,9 +19,9 @@
         <div class="min-h-screen grid lg:grid-cols-2">
             <!-- Brand panel: giant identity mark on near-black -->
             <div class="hidden lg:flex flex-col items-center justify-center bg-brand-900 text-white p-16">
-                <x-application-logo class="w-52 h-52 fill-current text-white" />
+                <img src="{{ asset('tandem-icon.svg') }}" alt="Tandem" class="w-52 h-52">
                 <h1 class="mt-10 text-4xl font-bold tracking-tight">
-                    {{ config('app.name', 'Blog Platform') }}
+                    {{ config('app.name', 'Tandem') }}
                 </h1>
                 <p class="mt-4 max-w-sm text-center text-brand-300">
                     Share your stories, connect with friends, and discover what the community is reading.
@@ -31,9 +33,7 @@
                 <div class="w-full max-w-sm">
                     <!-- Mobile brand mark -->
                     <div class="flex items-center justify-center lg:hidden mb-8">
-                        <div class="bg-brand-900 rounded-full p-4">
-                            <x-application-logo class="w-12 h-12 fill-current text-white" />
-                        </div>
+                        <img src="{{ asset('tandem-icon.svg') }}" alt="Tandem" class="w-12 h-12 rounded-full">
                     </div>
 
                     <div class="bg-white border border-brand-100 rounded-2xl shadow-sm p-panel">

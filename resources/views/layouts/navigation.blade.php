@@ -5,8 +5,8 @@
             <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ url('/') }}" class="text-xl font-bold text-brand-900 dark:text-white">
-                        {{ config('app.name', 'Blog Platform') }}
+<a href="{{ url('/') }}" class="flex items-center">
+                        <img src="{{ asset('tandem-logo.svg') }}" alt="Tandem" class="h-12 w-auto">
                     </a>
                 </div>
 

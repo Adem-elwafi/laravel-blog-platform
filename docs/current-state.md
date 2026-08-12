@@ -38,6 +38,11 @@ Snapshot of what works, what's open, and what's deferred. Update as things chang
 **Navigation**
 - `/dashboard` redirects to `/friends` (ADR-009); the Breeze dashboard stub is gone.
 
+**Brand**
+- Shared name **Tandem** + logo (ADR-011). `public/tandem-logo.svg` (navbar wordmark)
+  and `public/tandem-icon.svg` (favicon / auth-page tile) are wired into the layout;
+  blog and realtime-chat use the identical assets.
+
 ## Test coverage
 
 - Only Breeze default tests (auth + profile). No feature tests yet for the feed or friend
@@ -46,8 +51,6 @@ Snapshot of what works, what's open, and what's deferred. Update as things chang
 
 ## Open / deferred
 
-- **Unified app name + logo** across both apps — explicitly held for a direct user
-  decision. Not to be chosen by any agent.
 - **Feature backlog** (brainstorm only, not committed): background customization, chat
   image uploads.
 - **Block-user UI:** the backend action exists in chat (`BlockUserAction`,

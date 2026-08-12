@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" width="320" height="96" role="img" aria-label="Tandem">
+  <!-- Mark: two interlocking rings = blog + chat sharing one core -->
+  <g>
+    <circle cx="36" cy="48" r="18" fill="#111111"/>
+    <circle cx="56" cy="48" r="18" fill="#FFFFFF" stroke="#111111" stroke-width="3"/>
+    <circle cx="46" cy="48" r="5" fill="#22C55E"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="90" y="49" font-family="Figtree, 'Segoe UI', system-ui, -apple-system, sans-serif" font-size="34" font-weight="600" letter-spacing="-1" fill="#111111" dominant-baseline="central">Tandem</text>
+</svg>

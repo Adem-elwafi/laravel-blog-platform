@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'Blog Platform') }}</title>
+        <title>{{ config('app.name', 'Tandem') }}</title>
+
+        <link rel="icon" type="image/svg+xml" href="{{ asset('tandem-icon.svg') }}">
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!-- Fonts -->
@@ -89,7 +91,7 @@
             <footer class="bg-gray-800 dark:bg-gray-950 text-gray-100 mt-12">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <p class="text-gray-400">&copy; {{ date('Y') }} {{ config('app.name', 'Blog Platform') }}</p>
+                        <p class="text-gray-400">&copy; {{ date('Y') }} {{ config('app.name', 'Tandem') }}</p>
                         <ul class="flex items-center gap-6 text-sm">
                             <li><a href="#" class="text-gray-300 hover:text-white">About</a></li>
                             <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>

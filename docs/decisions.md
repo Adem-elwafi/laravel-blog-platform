@@ -89,6 +89,26 @@ path. Do not revert to the default authorizer without re-testing the cross-origi
 
 ---
 
+## ADR-011 — Shared name + logo: Tandem (2026)
+
+**Decision:** Both apps share the identity **Tandem** and the same logo/icon assets.
+`public/tandem-logo.svg` (interlocking link-rings + wordmark, 320×96) and
+`public/tandem-icon.svg` (near-black tile, 128×128) are copied into both repos and wired
+into the navbars, auth/guest pages, and favicons. Wordmark/rings use `brand-900`
+(`#111111`); the shared-core node uses `accent` (`#22C55E`).
+
+**Rationale:** The two apps share one login, one DB, and one design token set — a unified
+name makes the SSO relationship visible to users. "Tandem" describes the architecture
+(two independent apps working as one) and the motif — interlocking rings with a green
+node at the overlap — reads as two things sharing one core.
+
+**Trade-offs:** The word-form of the logo depends on a Figtree/system sans-serif fallback
+in the SVG `<text>`; if a build embeds fonts strictly, the wordmark may render in a
+fallback face. Originals live in the shared workspace `brand/` folder (not inside either
+repo); keep that as the source of truth for future tweaks.
+
+---
+
 ## ADR-005 — `FriendshipStatus` enum is duplicated across apps (2026)
 
 **Decision:** `FriendshipStatus` exists in both realtime-chat (`app/Enums/FriendshipStatus.php`) and blog-platform. realtime-chat is the canonical copy; blog's copy carries a sync-note comment and is kept identical by convention.
