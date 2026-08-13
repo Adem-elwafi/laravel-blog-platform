@@ -44,7 +44,26 @@ module.exports = {
         panel: '16px',
         avatar: '12px',
       },
+      // Background presets (background-customization feature). Keys must stay
+      // in sync with App\Support\BackgroundPresets::ALL in BOTH apps.
+      // NOTE: keys must be FLAT (Tailwind v3 does not generate utilities from
+      // nested backgroundImage objects) → `bg-backgrounds-obsidian` etc.
+      backgroundImage: {
+        'backgrounds-obsidian': 'linear-gradient(180deg, #161616 0%, #111111 100%)',
+        'backgrounds-graphite': 'linear-gradient(160deg, #262626 0%, #111111 60%, #0a0a0a 100%)',
+        'backgrounds-slate':    'linear-gradient(160deg, #1f2937 0%, #111827 55%, #0b1220 100%)',
+        'backgrounds-midnight': 'linear-gradient(160deg, #1e3a8a 0%, #172554 55%, #0f1a3d 100%)',
+        'backgrounds-ocean':    'linear-gradient(160deg, #164e63 0%, #0e3a4d 55%, #0a2b3a 100%)',
+        'backgrounds-emerald':  'linear-gradient(160deg, #065f46 0%, #064e3b 55%, #06302c 100%)',
+        'backgrounds-plum':     'linear-gradient(160deg, #4c1d95 0%, #3b1466 55%, #2a0f4d 100%)',
+        'backgrounds-ember':    'linear-gradient(160deg, #78350f 0%, #5b2a0e 55%, #3d1d0a 100%)',
+      },
     },
   },
+  safelist: [
+    // Guarantee the preset utilities exist even though the preset key is
+    // applied dynamically (e.g. `bg-backgrounds-{{ $user->theme_background }}`).
+    { pattern: /bg-backgrounds-(obsidian|graphite|slate|midnight|ocean|emerald|plum|ember)/ },
+  ],
   plugins: [],
 }

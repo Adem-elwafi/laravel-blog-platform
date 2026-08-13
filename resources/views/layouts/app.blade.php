@@ -25,9 +25,15 @@
         <!-- Styles and Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.jsx', 'resources/js/react-app.jsx'])
     </head>
-    <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-        
-        <div class="flex flex-col min-h-screen">
+    <body class="font-sans antialiased text-gray-900 dark:text-gray-100">
+
+        @php
+            // App-wide canvas background (H3). Null / empty → the default neutral canvas.
+            $appTheme = auth()->user()->theme_background ?? null;
+            $canvasClass = $appTheme ? "bg-backgrounds-{$appTheme}" : 'bg-gray-50 dark:bg-gray-900';
+        @endphp
+
+        <div class="flex flex-col min-h-screen {{ $canvasClass }}">
             <!-- Navigation -->
             @include('layouts.navigation')
 

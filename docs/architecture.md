@@ -18,7 +18,7 @@ created and maintained by exactly one app's migrations.
 
 | Table | Owner | Notes |
 |---|---|---|
-| `users` | realtime-chat | Base `users` migration lives in chat. blog adds the `role` column via its own `add_role_to_users_table` migration (`role` is in `User::$fillable`). |
+| `users` | realtime-chat | Base `users` migration lives in chat. blog adds the `role` column via its own `add_role_to_users_table` migration (`role` is in `User::$fillable`). Background-preset columns (`theme_background`, `profile_background`) were added by chat's `add_background_presets_to_users_table` migration. |
 | `sessions`, `cache`, `jobs` | realtime-chat | Framework base tables, created by chat's base migrations. `sessions` is the shared SSO session store. |
 | `conversations`, `messages`, `friendships` | realtime-chat | Chat domain. Friend-request logic lives here only (see decisions). |
 | `posts`, `comments`, `likes` | blog-platform | Blog domain. |
@@ -173,7 +173,8 @@ details.
 
 - No `migrate:fresh` / `migrate:fresh --seed` against `shared_app_db`.
 - Respect ownership boundaries: blog writes only `posts`/`comments`/`likes` (and the `role`
-  column); chat writes `conversations`/`messages`/`friendships`/`users` base fields. Blog
+  column); chat writes `conversations`/`messages`/`friendships`/`users` base + background
+  fields. Blog
   must not create/modify chat-owned tables.
 - Do not alter these config files without human review of the SSO implications:
   `bootstrap/app.php`, `config/cors.php`, `config/sanctum.php`, `.env` (especially
@@ -182,5 +183,5 @@ details.
   `config/sanctum.php` / `.env` without an explicit human sign-off.
 - Keep the custom `channelAuthorization.customHandler` in `resources/js/echo.js` — the
   default pusher-js authorizer breaks cross-origin channel auth (see §5 / ADR-006).
-- New UI work must use the shared design tokens (brand/accent/density) defined in
+- New UI work must use the shared design tokens (brand/accent/density/background) defined in
   `tailwind.config.js` — no new hardcoded hex/px (see `docs/design-system.md`).

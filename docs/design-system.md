@@ -66,6 +66,35 @@ Shared spacing tokens (Phase 4a) live under `theme.extend.spacing` in both apps'
 | `panel` | `16px` | standard card gutter (`p-panel`, `px-panel`) |
 | `avatar` | `12px` | avatar-to-text gap, tight inline gaps (`gap-avatar`) |
 
+## Background presets (background-customization)
+
+Per-user background customization ships as **design tokens**, not hardcoded CSS.
+
+- Defined under `theme.extend.backgroundImage` in **both** apps' `tailwind.config.js` with
+  **flat** keys — e.g. `'backgrounds-obsidian': 'linear-gradient(...)'` — which generate
+  utilities `bg-backgrounds-obsidian`, `bg-backgrounds-graphite`, etc. Tailwind v3 does
+  **not** generate utilities from *nested* `backgroundImage` objects, so the keys must stay
+  flat.
+- The full set is **safelisted** (`{ pattern: /bg-backgrounds-(…)/ }`) because preset keys
+  are applied dynamically (`bg-backgrounds-{{ $key }}`) and would otherwise be purged.
+- Keys/labels are mirrored in `App\Support\BackgroundPresets::ALL` in **both** apps; the PHP
+  class is the single source of truth for validation (`Rule::in(BackgroundPresets::keys())`)
+  and the `x-background-picker` component.
+- The preset is applied as the app-wide canvas (layout wrapper) and as the profile cover
+  (`bg-backgrounds-{key}`); all presets are dark/deep gradients so light text on the canvas
+  stays readable.
+
+| Key | Gradient |
+|---|---|
+| `obsidian` | `linear-gradient(180deg, #161616 0%, #111111 100%)` |
+| `graphite` | `linear-gradient(160deg, #262626 0%, #111111 60%, #0a0a0a 100%)` |
+| `slate` | `linear-gradient(160deg, #1f2937 0%, #111827 55%, #0b1220 100%)` |
+| `midnight` | `linear-gradient(160deg, #1e3a8a 0%, #172554 55%, #0f1a3d 100%)` |
+| `ocean` | `linear-gradient(160deg, #164e63 0%, #0e3a4d 55%, #0a2b3a 100%)` |
+| `emerald` | `linear-gradient(160deg, #065f46 0%, #064e3b 55%, #06302c 100%)` |
+| `plum` | `linear-gradient(160deg, #4c1d95 0%, #3b1466 55%, #2a0f4d 100%)` |
+| `ember` | `linear-gradient(160deg, #78350f 0%, #5b2a0e 55%, #3d1d0a 100%)` |
+
 ## Radii
 
 - **Cards / panels:** `rounded-2xl` (16px) — feed cards, request panels, profile cards.
@@ -86,7 +115,7 @@ Shared spacing tokens (Phase 4a) live under `theme.extend.spacing` in both apps'
 
 ## Shared-token rule (applies to both apps)
 
-Both apps' `tailwind.config.js` ship the **identical** brand/accent/density token set.
+Both apps' `tailwind.config.js` ship the **identical** brand/accent/density/background token set.
 Any new UI work in either app must use these tokens — no new hardcoded hex values or px
 gaps. If a value isn't in the set, extend the shared set in **both** apps'
 `tailwind.config.js` rather than hardcoding a one-off.

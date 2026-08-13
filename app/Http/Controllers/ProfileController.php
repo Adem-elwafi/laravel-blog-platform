@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
+use App\Support\BackgroundPresets;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -61,6 +63,27 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Update the user's background customization (app-wide theme + profile cover).
+     *
+     * Both fields live on the shared `users` table (owned by realtime-chat),
+     * so saving here is visible to realtime-chat immediately.
+     */
+    public function updateAppearance(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'theme_background' => ['nullable', 'string', Rule::in(BackgroundPresets::keys())],
+            'profile_background' => ['nullable', 'string', Rule::in(BackgroundPresets::keys())],
+        ]);
+
+        $request->user()->fill([
+            'theme_background' => $request->input('theme_background') ?: null,
+            'profile_background' => $request->input('profile_background') ?: null,
+        ])->save();
+
+        return Redirect::route('profile.edit')->with('status', 'appearance-updated');
     }
 
     /**

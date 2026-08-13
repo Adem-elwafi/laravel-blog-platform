@@ -1,4 +1,5 @@
 <x-app-layout>
+    <div class="bg-brand-50 dark:bg-gray-900 min-h-screen">
     <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Post Header -->
         <header class="mb-8">
@@ -107,4 +108,5 @@
             ></div>
         </section>
     </article>
+    </div>
 </x-app-layout>

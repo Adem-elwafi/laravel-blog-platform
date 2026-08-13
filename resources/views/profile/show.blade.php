@@ -1,5 +1,11 @@
 <x-app-layout>
-    <div class="bg-brand-50 dark:bg-gray-900 min-h-screen">
+    @php
+        // H4: the cover/banner behind the avatar uses the profile's own preset.
+        $profileCoverClass = $user->profile_background
+            ? "bg-backgrounds-{$user->profile_background}"
+            : 'bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700';
+    @endphp
+    <div class="min-h-screen">
         <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -8,7 +14,7 @@
                     {{-- Profile header card --}}
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-brand-100 dark:border-gray-700 overflow-hidden">
                         {{-- Cover --}}
-                        <div class="h-40 sm:h-56 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-700 relative">
+                        <div class="h-40 sm:h-56 {{ $profileCoverClass }} relative">
                             <svg class="absolute inset-0 w-full h-full opacity-10" fill="none" viewBox="0 0 600 200" preserveAspectRatio="none">
                                 <path d="M0 140 Q 100 60 220 110 T 460 80 T 600 130 V 200 H 0 Z" fill="white"/>
                             </svg>
