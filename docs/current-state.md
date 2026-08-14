@@ -53,10 +53,17 @@ Snapshot of what works, what's open, and what's deferred. Update as things chang
 
 - **Feature backlog** (brainstorm only, not committed): background customization, chat
   image uploads.
-- **Block-user UI:** the backend action exists in chat (`BlockUserAction`,
-  `POST /api/friend-requests/{friendship}/block`) but there is no UI anywhere yet.
+- **Block-user UI:** shipped in chat (`POST /api/users/{user}/block` + `BlockButton` on
+  chat profiles). No unblock / blocked-users list management anywhere yet (deferred —
+  it needs new endpoints + a manage page, beyond the minimal block flow).
+- **Action layer (assessed, none added):** controllers are simple CRUD — create/update
+  post (single image write), create/delete comment (inline ownership check). Form
+  Requests + API Resources already carry the validation/transformation concerns; an
+  `app/Actions` layer would be ceremony with no multi-step transaction to encapsulate.
 - **No `migrate:fresh` guard:** convention only (ADR-002); no code-level guard.
-- **`components/ui/` is empty** — shared presentational primitives not yet extracted.
+- **`components/ui/` is empty (assessed, left empty):** both apps only have
+  feature-specific components (feed islands, friendship buttons); no duplicated generic
+  presentational primitives to extract yet. Extracting one would be speculative.
 
 ## Data hygiene (Phase 1, still current)
 
